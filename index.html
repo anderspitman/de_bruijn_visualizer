@@ -79,11 +79,15 @@ var challengeModule = (function() {
 
   function buildNodes() {
     for (var i=0; i<challengers.length; i+=1) {
-      var entry = {
-        'name': challengers[i].name,
-        'group': 1
-      };
-      nodes.push(entry);
+      if (challengers[i].name.length > 0) {
+        var completedChallenge = challengers[i].challenged.length > 0;
+        var entry = {
+          'name': challengers[i].name,
+          'completed': completedChallenge,
+          'group': 1
+        };
+        nodes.push(entry);
+      }
     }
     return nodes;
   }
@@ -96,30 +100,45 @@ var challengeModule = (function() {
         var sourceIdx = i;
         var targetIdx = indexOf(challengers[i].challenged[j], challengers);
         if (targetIdx > -1) {
-          updatePlacement(sourceIdx, targetIdx);
+          //updatePlacement(sourceIdx, targetIdx);
           links.push({'source': sourceIdx, 'target': targetIdx, 'value': 1});
+        }
+        else {
+          var newEntry = {
+            "name": challengers[i].challenged[j],
+            "group": 1
+          };
+          var len = nodes.push(newEntry);
+          var indexOfNewEntry = len-1;
+          //updatePlacement(sourceIdx, len-1);
+          links.push({'source': sourceIdx, 'target': indexOfNewEntry, 'value': 1});
         }
       }
     }
     return links;
   }
 
-  function updatePlacement(sourceIdx, targetIdx) {
-    if (nodes[sourceIdx].group > (nodes[targetIdx].group - 1)) {
-      nodes[targetIdx].group = nodes[sourceIdx].group + 1;
-      for (var i=0; i<challengers[targetIdx].challenged.length; i+=1) {
-        var subTargetIdx = indexOf(challengers[targetIdx].challenged[i]);
-        if (subTargetIdx > -1) {
-          updatePlacement(targetIdx, subTargetIdx);
-        }
-      }
-    }
-  }
+  // Updates the vertical placement of the nodes. This helps create a treelike
+  // structure, however I found that in practice a tree isn't ideal for the
+  // data set. Also this could be computationally heavy so should probably
+  // be avoided if not necessary
+  //function updatePlacement(sourceIdx, targetIdx) {
+  //  if (nodes[sourceIdx].group > (nodes[targetIdx].group - 1)) {
+  //    nodes[targetIdx].group = nodes[sourceIdx].group + 1;
+  //    for (var i=0; i<challengers[targetIdx].challenged.length; i+=1) {
+  //      var subTargetIdx = indexOf(challengers[targetIdx].challenged[i]);
+  //      if (subTargetIdx > -1) {
+  //        updatePlacement(targetIdx, subTargetIdx);
+  //      }
+  //    }
+  //  }
+  //}
 
   function publicSetData(data) {
     challengers = data;
     buildNodes();
     buildLinks();
+    console.log(nodes);
   }
 
   function publicGetNodes() {
@@ -225,7 +244,17 @@ d3.json("data.json", function(error, json) {
       //.call(force.drag);
       .call(drag);
 
+  function setColor(d) {
+    if (d.completed) {
+      return 'steelblue';
+    }
+    else {
+      return 'tomato';
+    }
+  }
+
   node.append("circle")
+      .style("fill", setColor)
       .attr("r", 10);
 
   node.append("text")

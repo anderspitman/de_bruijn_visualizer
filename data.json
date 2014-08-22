@@ -73,9 +73,11 @@
     },
     {
       "name": "Melinda Gates",
-      "link": "",
+      "link": "http://youtu.be/v5Vo9k6BPn4",
       "notes": "",
       "challenged": [
+        "Stephen Colbert",
+        "Katie Couric"
       ]
     },
     {
@@ -251,6 +253,173 @@
       "notes": "",
       "challenged": [
         "Adam Sandler"
+      ]
+    },
+    {
+      "name": "Reed Hastings",
+      "link": "http://youtu.be/jgPT79RWxy8",
+      "notes": "CEO of Netflix",
+      "challenged": [
+        "Michael Burns",
+        "Macklemore"
+      ]
+    },
+    {
+      "name": "Macklemore",
+      "link": "http://youtu.be/GS7WZznByy8",
+      "notes": "Band",
+      "challenged": [
+        "Gary Payton",
+        "Shawn Kemp",
+        "Steve Scheffler"
+      ]
+    },
+    {
+      "name": "Russell Wilson",
+      "link": "http://youtu.be/cLIT8UDI24A",
+      "notes": "",
+      "challenged": [
+        "Paul Allen",
+        "Macklemore"
+      ]
+    },
+    {
+      "name": "Shawn Kemp",
+      "link": "http://youtu.be/-QtKDxJwo3I",
+      "notes": "",
+      "challenged": [
+        "Chris Hansen"
+      ]
+    },
+    {
+      "name": "Chris Hansen",
+      "link": "http://youtu.be/hSQ0uYODMTs",
+      "notes": "",
+      "challenged": [
+        "Pete Nordstrom",
+        "Erik Nordstrom",
+        "Wally Walker"
+      ]
+    },
+    {
+      "name": "Pete Nordstrom",
+      "link": "http://youtu.be/WXJywkQliCE",
+      "notes": "",
+      "challenged": [
+        "Bruce Nordstrom",
+        "Sam Jones"
+      ]
+    },
+    {
+      "name": "Erik Nordstrom",
+      "link": "http://youtu.be/WXJywkQliCE",
+      "notes": "",
+      "challenged": [
+        "Blake Nordstrom",
+        "Steve Goldfarb"
+      ]
+    },
+    {
+      "name": "Wally Walker",
+      "link": "http://youtu.be/5SD8xP1XqJg",
+      "notes": "",
+      "challenged": [
+        "Jack Sikma",
+        "Slick Watts",
+        "Eddie Poplawski"
+      ]
+    },
+    {
+      "name": "Stephen Colbert",
+      "link": "http://youtu.be/WzCv_7deGe8",
+      "notes": "",
+      "challenged": [
+        "Paul Mccartney",
+        "Neal Degrasse Tyson"
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "",
+      "link": "",
+      "notes": "",
+      "challenged": [
       ]
     }
   ]
