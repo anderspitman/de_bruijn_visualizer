@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "easyimage": "^1.0.2",
     "gulp": "^3.8.7"
   },
   "scripts": {
