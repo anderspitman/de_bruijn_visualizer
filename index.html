@@ -2,8 +2,12 @@
 <meta charset="utf-8">
 <style>
 
+body {
+  font-family: sans-serif;
+}
+
 .link {
-  stroke: #ccc;
+  stroke: #000;
 }
 
 .node text {
@@ -19,16 +23,41 @@
   pointer-events: all;
 }
 
-.wrapper {
+.center-container {
   width: 960px;
-  height: 544px;
   margin: auto;
+}
+
+.header {
+  text-align: center;
+}
+
+.graph-wrapper {
+  height: 544px;
+  width: 100%;
   border: 2px solid;
+}
+
+.instructions {
+  font-size: 24px;
 }
 
 </style>
 <body>
-<div class='wrapper'></div>
+<div class='header'>
+  <h1>ALS Ice Bucket Challenge Graph</h1>
+</div>
+<div class='center-container'>
+  <div class='graph-wrapper'></div>
+  <br>
+
+  <div class='instructions'><b>Zoom</b>: mouse wheel</div>
+  <br>
+  <div class='instructions'><b>Pan</b>: click empty area and drag</div>
+  <br>
+  <div class='instructions'><b>Manipulate graph</b>: click node and drag</div>
+
+</div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
@@ -117,7 +146,7 @@ function zoom() {
 var width = 960,
     height = 544
 
-var svg = d3.select(".wrapper").append("svg")
+var svg = d3.select(".graph-wrapper").append("svg")
     .attr("class", "mainSvg")
     .attr("width", width)
     .attr("height", height)
