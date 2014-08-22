@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.link {
+  stroke: #ccc;
+}
+
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+}
+
+.node circle {
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.wrapper {
+  width: 960px;
+  height: 544px;
+  margin: auto;
+  border: 2px solid;
+}
+
+</style>
+<body>
+<div class='wrapper'></div>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var challengeModule = (function() {
+
+  var challengers = {};
+  var nodes = [];
+  var links = [];
+
+  function indexOf(name) {
+    for (var i=0; i<challengers.length; i+=1) {
+      //console.log("searching", name, challengers[i].name);
+      if (name === challengers[i].name) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  function buildNodes() {
+    for (var i=0; i<challengers.length; i+=1) {
+      var entry = {
+        'name': challengers[i].name,
+        'group': 1
+      };
+      nodes.push(entry);
+    }
+    return nodes;
+  }
+
+  function buildLinks() {
+    for (var i=0; i<challengers.length; i+=1) {
+      //console.log(challengers[i].name);
+      for (var j=0; j<challengers[i].challenged.length; j+=1) {
+        //console.log("  "+challengers[i].challenged[j]);
+        var sourceIdx = i;
+        var targetIdx = indexOf(challengers[i].challenged[j], challengers);
+        if (targetIdx > -1) {
+          updatePlacement(sourceIdx, targetIdx);
+          links.push({'source': sourceIdx, 'target': targetIdx, 'value': 1});
+        }
+      }
+    }
+    return links;
+  }
+
+  function updatePlacement(sourceIdx, targetIdx) {
+    if (nodes[sourceIdx].group > (nodes[targetIdx].group - 1)) {
+      nodes[targetIdx].group = nodes[sourceIdx].group + 1;
+      for (var i=0; i<challengers[targetIdx].challenged.length; i+=1) {
+        var subTargetIdx = indexOf(challengers[targetIdx].challenged[i]);
+        if (subTargetIdx > -1) {
+          updatePlacement(targetIdx, subTargetIdx);
+        }
+      }
+    }
+  }
+
+  function publicSetData(data) {
+    challengers = data;
+    buildNodes();
+    buildLinks();
+  }
+
+  function publicGetNodes() {
+    return nodes;
+  }
+
+  function publicGetLinks() {
+    return links;
+  }
+
+  return {
+    setData: publicSetData,
+    getNodes: publicGetNodes,
+    getLinks: publicGetLinks
+  }
+
+}());
+
+function zoom() {
+  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")")
+}
+
+var width = 960,
+    height = 544
+
+var svg = d3.select(".wrapper").append("svg")
+    .attr("class", "mainSvg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("height", height)
+  //.append("g")
+    //.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+    .call(d3.behavior.zoom().on("zoom", zoom))
+  .append("g");
+
+svg.append("defs").append("marker")
+    .attr("id", "arrowhead")
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 20)
+    .attr("refY", 0)
+    .attr("markerWidth", 8)
+    .attr("markerHeight", 8)
+    .attr("orient", "auto")
+    .append("path")
+        .attr("d", "M0,-5L10,0L0,5Z");
+
+
+svg.append("rect")
+    .attr("class", "overlay")
+    .attr("width", width)
+    .attr("height", height);
+
+var force = d3.layout.force()
+    .gravity(.05)
+    .distance(50)
+    .charge(-1000)
+    .size([width, height]);
+
+
+d3.json("data.json", function(error, json) {
+  if (error) {
+    console.log(error);
+  }
+
+  challengeModule.setData(json.challengers);
+  var nodes = challengeModule.getNodes();
+  var links = challengeModule.getLinks();
+
+  force
+      .nodes(nodes)
+      .links(links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(links)
+    .enter().append("line")
+      .attr("class", "link")
+      .attr("marker-end", "url(#arrowhead)");
+
+  var node = svg.selectAll(".node")
+      .data(nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .call(force.drag);
+
+  //node.append("image")
+  //    .attr("xlink:href", "https://github.com/favicon.ico")
+  //    .attr("x", -8)
+  //    .attr("y", -8)
+  //    .attr("width", 16)
+  //    .attr("height", 16);
+
+  node.append("circle")
+      .attr("r", 10)
+      .style("fill", 'steelblue');
+
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name });
+
+  force.on("tick", function(e) {
+
+    //var k = .5 * e.alpha; 
+    //  node.each(function(d) { 
+    //    d.y += ((d.group) * 100 - d.y) * k; 
+    //});
+
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+});
+
+</script>
