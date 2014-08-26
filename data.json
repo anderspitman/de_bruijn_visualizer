@@ -49,7 +49,7 @@
     },
     {
       "name": "Bill Gates",
-      "link": "",
+      "link": "https://www.youtube.com/watch?v=XS6ysDFTbLU",
       "notes": "",
       "challenged": [
         "Elon Musk",
@@ -339,87 +339,139 @@
       ]
     },
     {
-      "name": "",
+      "name": "Jeff Bezos",
+      "link": "https://www.youtube.com/watch?v=DFVezzjAhFY",
+      "notes": "Patrick Stewart chose to donate instead of doing the challenge",
+      "challenged": [
+        "William Shatner",
+        "Patrick Stewart",
+        "George Takei"
+      ]
+    },
+    {
+      "name": "Satya Nadella",
+      "link": "https://www.youtube.com/watch?v=3YDxB6hXWYc",
+      "notes": "",
+      "challenged": [
+        "Jeff Bezos",
+        "Larry Page"
+      ]
+    },
+    {
+      "name": "Larry Page",
+      "link": "https://www.youtube.com/watch?v=D9QYepYfGxo",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "Sergey Brin",
+      "link": "https://www.youtube.com/watch?v=D9QYepYfGxo",
+      "notes": "",
+      "challenged": [
+      ]
+    },
+    {
+      "name": "Ethel Kennedy",
+      "link": "",
+      "notes": "Barack Obama chose to donate $100 instead of doing the challenge",
+      "challenged": [
+        "Barack Obama"
+      ]
+    },
+    {
+      "name": "\"Weird Al\" Yankovic",
+      "link": "https://www.youtube.com/watch?v=1nYjEF6e_n8",
+      "notes": "",
+      "challenged": [
+        "Barack Obama",
+        "The Dalai Lama",
+        "The Pope"
+      ]
+    },
+    {
+      "name": "LeBron James",
+      "link": "http://instagram.com/p/rzLh7nCTEk",
+      "notes": "",
+      "challenged": [
+        "Barack Obama",
+        "LeBron Jr.",
+        "Bryce Maximums"
+      ]
+    },
+    {
+      "name": "Barack Obama",
       "link": "",
       "notes": "",
       "challenged": [
       ]
     },
     {
-      "name": "",
-      "link": "",
+      "name": "George Takei",
+      "link": "https://www.youtube.com/watch?v=k9cJhiplS0c",
       "notes": "",
       "challenged": [
+        "Buzz Aldrin",
+        "Neal Degrasse Tyson",
+        "Ian McKellen"
       ]
     },
     {
-      "name": "",
-      "link": "",
+      "name": "Ian McKellen",
+      "link": "https://www.youtube.com/watch?v=eUFqK4CPb7A",
       "notes": "",
       "challenged": [
+        "Laura Linney",
+        "Derek Jacobi",
+        "Anthony Hopkins"
       ]
     },
     {
-      "name": "",
-      "link": "",
+      "name": "Steven Spielberg",
+      "link": "https://www.youtube.com/watch?v=QFF6EWVSACE",
       "notes": "",
       "challenged": [
+        "George Lucas",
+        "Jeffrey Katzenberg",
+        "J.J. Abrams"
       ]
     },
     {
-      "name": "",
-      "link": "",
+      "name": "Oprah Winfrey",
+      "link": "https://www.youtube.com/watch?v=0FCxM8jgftw",
       "notes": "",
       "challenged": [
+        "Steven Spielberg",
+        "Manish Dayal",
+        "Helen Mirren"
       ]
     },
     {
-      "name": "",
-      "link": "",
+      "name": "Conan O'Brien",
+      "link": "https://www.youtube.com/watch?v=0fmmoHmpT70",
       "notes": "",
       "challenged": [
+        "Jimmy Carter",
+        "Pelé",
+        "Haley Joel Osment"
       ]
     },
     {
-      "name": "",
-      "link": "",
+      "name": "Stephen King",
+      "link": "https://www.youtube.com/watch?v=XO7lFV2e-xA",
       "notes": "",
       "challenged": [
+        "John Grisham"
       ]
     },
     {
-      "name": "",
-      "link": "",
+      "name": "Foo Fighters",
+      "link": "https://www.youtube.com/watch?v=XLZOjLv0_6k",
       "notes": "",
       "challenged": [
-      ]
-    },
-    {
-      "name": "",
-      "link": "",
-      "notes": "",
-      "challenged": [
-      ]
-    },
-    {
-      "name": "",
-      "link": "",
-      "notes": "",
-      "challenged": [
-      ]
-    },
-    {
-      "name": "",
-      "link": "",
-      "notes": "",
-      "challenged": [
-      ]
-    },
-    {
-      "name": "",
-      "link": "",
-      "notes": "",
-      "challenged": [
+        "Jack Black",
+        "John Travolta",
+        "Stephen King"
       ]
     }
   ]
