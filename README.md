@@ -1,4 +1,4 @@
-andersp.github.io
+anderspitman.github.io
 =================
 
 This is a github page for hosting a visualization of the 
@@ -6,7 +6,7 @@ This is a github page for hosting a visualization of the
 This visualization specifically deals with representing who challenged who in a graphical manner, so we can get a feel for part of the viral spread of the movement.
 
 The current live version is hosted 
-[here](http://andersp.github.io/).
+[here](http://anderspitman.github.io/).
 
 Currently all the data is kept in a flat file in data.json. It's simple to add new entries. All fields are required but can be blank except for the name. The graph uses simple text matching to link nodes, so the spelling and capitalization are very important.
 
