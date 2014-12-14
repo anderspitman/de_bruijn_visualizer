@@ -70,15 +70,15 @@ body {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
-var challengeModule = (function() {
+var graphModule = (function() {
 
-  var challengers = {};
+  var graph = {};
   var nodes = [];
   var links = [];
 
   function indexOf(name) {
-    for (var i=0; i<challengers.length; i+=1) {
-      if (name === challengers[i].name) {
+    for (var i=0; i<graph.length; i+=1) {
+      if (name === graph[i].name) {
         return i;
       }
     }
@@ -86,12 +86,12 @@ var challengeModule = (function() {
   }
 
   function buildNodes() {
-    for (var i=0; i<challengers.length; i+=1) {
-      if (challengers[i].name.length > 0) {
-        var completedChallenge = challengers[i].outlinks.length > 0;
+    for (var i=0; i<graph.length; i+=1) {
+      if (graph[i].name.length > 0) {
+        var haveOutlinks = graph[i].outlinks.length > 0;
         var entry = {
-          'name': challengers[i].name,
-          'completed': completedChallenge,
+          'name': graph[i].name,
+          'have_outlinks': haveOutlinks,
           'group': 1
         };
         nodes.push(entry);
@@ -101,16 +101,16 @@ var challengeModule = (function() {
   }
  
   function buildLinks() {
-    for (var i=0; i<challengers.length; i+=1) {
-      for (var j=0; j<challengers[i].outlinks.length; j+=1) {
+    for (var i=0; i<graph.length; i+=1) {
+      for (var j=0; j<graph[i].outlinks.length; j+=1) {
         var sourceIdx = i;
-        var targetIdx = indexOf(challengers[i].outlinks[j], challengers);
+        var targetIdx = indexOf(graph[i].outlinks[j], graph);
         if (targetIdx > -1) {
           links.push({'source': sourceIdx, 'target': targetIdx, 'value': 1});
         }
         else {
           var newEntry = {
-            "name": challengers[i].outlinks[j],
+            "name": graph[i].outlinks[j],
             "group": 1
           };
           var len = nodes.push(newEntry);
@@ -123,7 +123,7 @@ var challengeModule = (function() {
   }
 
   function publicSetData(data) {
-    challengers = data;
+    graph = data;
     buildNodes();
     buildLinks();
   }
@@ -243,9 +243,9 @@ btn.addEventListener("click", function() {
     data["nodes"].push({ "name": node, "outlinks": outlinks });
   }
 
-  challengeModule.setData(data.nodes);
-  var nodes = challengeModule.getNodes();
-  var links = challengeModule.getLinks();
+  graphModule.setData(data.nodes);
+  var nodes = graphModule.getNodes();
+  var links = graphModule.getLinks();
 
   force
       .nodes(nodes)
@@ -266,7 +266,7 @@ btn.addEventListener("click", function() {
       .call(drag);
 
   function setColor(d) {
-    if (d.completed) {
+    if (d.have_outlinks) {
       return 'steelblue';
     }
     else {
