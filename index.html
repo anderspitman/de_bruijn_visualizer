@@ -55,20 +55,7 @@ body {
 <div class='center-container'>
   <div class='graph-wrapper'></div>
   <br>
-  <textarea id="text_box" rows="20" cols="120">(AC AT) -> (CC TA), (CT TT)
-(AT TG) -> (TA GA), (TT GA)
-(CA GA) -> (AC AT)
-(CC TA) -> (CG AC)
-(CG AC) -> (GA CT)
-(CT AG) -> (TG GC)
-(CT TT) -> (TG TC)
-(GA CT) -> (AA TT), (AT TG), (AT TG)
-(TA GA) -> (AC AT)
-(TC AA) -> (CT AG)
-(TG GC) -> (GA CT)
-(TG TC) -> (GA CT)
-(TT GA) -> (TC AA)
-(AA TT) -> (CA GA)</textarea>
+  <textarea id="text_box" rows="20" cols="120"></textarea>
   <br>
   <button id='graph_button'>Graph Data</button>
   <br>
@@ -78,11 +65,6 @@ body {
   <div class='instructions'><b>Pan:</b> click empty area and drag</div>
   <br>
   <div class='instructions'><b>Manipulate node positions:</b> click node and drag</div>
-  <br>
-<!--
-  <br>
-  <a class='github-link' href='https://github.com/andersp/andersp.github.io'>I need your help populating this graph!! Fork this on github and add entries!</a>
--->
 </div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -96,7 +78,6 @@ var challengeModule = (function() {
 
   function indexOf(name) {
     for (var i=0; i<challengers.length; i+=1) {
-      //console.log("searching", name, challengers[i].name);
       if (name === challengers[i].name) {
         return i;
       }
@@ -106,7 +87,6 @@ var challengeModule = (function() {
 
   function buildNodes() {
     for (var i=0; i<challengers.length; i+=1) {
-      //console.log(challengers[i]);
       if (challengers[i].name.length > 0) {
         var completedChallenge = challengers[i].outlinks.length > 0;
         var entry = {
@@ -122,13 +102,10 @@ var challengeModule = (function() {
  
   function buildLinks() {
     for (var i=0; i<challengers.length; i+=1) {
-      //console.log(challengers[i].name);
       for (var j=0; j<challengers[i].outlinks.length; j+=1) {
-        //console.log("  "+challengers[i].challenged[j]);
         var sourceIdx = i;
         var targetIdx = indexOf(challengers[i].outlinks[j], challengers);
         if (targetIdx > -1) {
-          //updatePlacement(sourceIdx, targetIdx);
           links.push({'source': sourceIdx, 'target': targetIdx, 'value': 1});
         }
         else {
@@ -138,29 +115,12 @@ var challengeModule = (function() {
           };
           var len = nodes.push(newEntry);
           var indexOfNewEntry = len-1;
-          //updatePlacement(sourceIdx, len-1);
           links.push({'source': sourceIdx, 'target': indexOfNewEntry, 'value': 1});
         }
       }
     }
     return links;
   }
-
-  // Updates the vertical placement of the nodes. This helps create a treelike
-  // structure, however I found that in practice a tree isn't ideal for the
-  // data set. Also this could be computationally heavy so should probably
-  // be avoided if not necessary
-  //function updatePlacement(sourceIdx, targetIdx) {
-  //  if (nodes[sourceIdx].group > (nodes[targetIdx].group - 1)) {
-  //    nodes[targetIdx].group = nodes[sourceIdx].group + 1;
-  //    for (var i=0; i<challengers[targetIdx].challenged.length; i+=1) {
-  //      var subTargetIdx = indexOf(challengers[targetIdx].challenged[i]);
-  //      if (subTargetIdx > -1) {
-  //        updatePlacement(targetIdx, subTargetIdx);
-  //      }
-  //    }
-  //  }
-  //}
 
   function publicSetData(data) {
     challengers = data;
@@ -218,8 +178,6 @@ var svg = d3.select(".graph-wrapper").append("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("height", height)
-  //.append("g")
-    //.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
     .call(d3.behavior.zoom().on("zoom", zoom))
   .append("g");
 
@@ -251,16 +209,31 @@ var drag = force.drag()
     .on("drag", dragged)
     .on("dragend", dragended);
 
+var default_graph_text = [
+  '(AC AT) -> (CC TA), (CT TT)',
+  '(AT TG) -> (TA GA), (TT GA)',
+  '(CA GA) -> (AC AT)',
+  '(CC TA) -> (CG AC)',
+  '(CG AC) -> (GA CT)',
+  '(CT AG) -> (TG GC)',
+  '(CT TT) -> (TG TC)',
+  '(GA CT) -> (AA TT), (AT TG), (AT TG)',
+  '(TA GA) -> (AC AT)',
+  '(TC AA) -> (CT AG)',
+  '(TG GC) -> (GA CT)',
+  '(TG TC) -> (GA CT)',
+  '(TT GA) -> (TC AA)',
+  '(AA TT) -> (CA GA)'
+].join('\n');
 
-//d3.json("graph.json", function(error, json) {
+var textBox = document.querySelector("#text_box");
+textBox.value = default_graph_text;
+
 var btn = document.querySelector("#graph_button");
 btn.addEventListener("click", function() {
-  textBox = document.querySelector("#text_box");
   lines = textBox.value.split('\n');
-  //console.log(lines)
   data = { "nodes": [] }
   for (var i=0; i<lines.length; i++) {
-    //line = lines[i].replace(/ /g, '').split('->');
     line = lines[i].split('->');
     node = line[0].trim();
     outlinks = line[1].split(',');
