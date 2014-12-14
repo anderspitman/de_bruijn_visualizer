@@ -50,10 +50,28 @@ body {
 </style>
 <body>
 <div class='header'>
-  <h1>ALS Ice Bucket Challenge Graph</h1>
+  <h1>De Bruijn Graph Visualizer</h1>
 </div>
 <div class='center-container'>
   <div class='graph-wrapper'></div>
+  <br>
+  <textarea id="text_box" rows="20" cols="120">(AC AT) -> (CC TA), (CT TT)
+(AT TG) -> (TA GA), (TT GA)
+(CA GA) -> (AC AT)
+(CC TA) -> (CG AC)
+(CG AC) -> (GA CT)
+(CT AG) -> (TG GC)
+(CT TT) -> (TG TC)
+(GA CT) -> (AA TT), (AT TG), (AT TG)
+(TA GA) -> (AC AT)
+(TC AA) -> (CT AG)
+(TG GC) -> (GA CT)
+(TG TC) -> (GA CT)
+(TT GA) -> (TC AA)
+(AA TT) -> (CA GA)</textarea>
+  <br>
+  <button id='graph_button'>Graph Data</button>
+  <br>
   <br>
   <div class='instructions'><b>Zoom:</b> mouse wheel</div>
   <br>
@@ -61,11 +79,10 @@ body {
   <br>
   <div class='instructions'><b>Manipulate node positions:</b> click node and drag</div>
   <br>
-  <div class='instructions'><b>Blue nodes:</b> Confirmed video of challenge completed</div>
-  <br>
-  <div class='instructions'><b>Red nodes:</b> They've been challenged but not yet confirmed</div>
+<!--
   <br>
   <a class='github-link' href='https://github.com/andersp/andersp.github.io'>I need your help populating this graph!! Fork this on github and add entries!</a>
+-->
 </div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -89,8 +106,9 @@ var challengeModule = (function() {
 
   function buildNodes() {
     for (var i=0; i<challengers.length; i+=1) {
+      //console.log(challengers[i]);
       if (challengers[i].name.length > 0) {
-        var completedChallenge = challengers[i].challenged.length > 0;
+        var completedChallenge = challengers[i].outlinks.length > 0;
         var entry = {
           'name': challengers[i].name,
           'completed': completedChallenge,
@@ -101,21 +119,21 @@ var challengeModule = (function() {
     }
     return nodes;
   }
-
+ 
   function buildLinks() {
     for (var i=0; i<challengers.length; i+=1) {
       //console.log(challengers[i].name);
-      for (var j=0; j<challengers[i].challenged.length; j+=1) {
+      for (var j=0; j<challengers[i].outlinks.length; j+=1) {
         //console.log("  "+challengers[i].challenged[j]);
         var sourceIdx = i;
-        var targetIdx = indexOf(challengers[i].challenged[j], challengers);
+        var targetIdx = indexOf(challengers[i].outlinks[j], challengers);
         if (targetIdx > -1) {
           //updatePlacement(sourceIdx, targetIdx);
           links.push({'source': sourceIdx, 'target': targetIdx, 'value': 1});
         }
         else {
           var newEntry = {
-            "name": challengers[i].challenged[j],
+            "name": challengers[i].outlinks[j],
             "group": 1
           };
           var len = nodes.push(newEntry);
@@ -183,6 +201,14 @@ function dragended(d) {
   d3.select(this).classed("dragging", false);
 }
 
+var toggleColor = (function(){
+   var currentColor = "steelblue";
+
+    return function(){
+        currentColor = currentColor == "steelblue" ? "tomato" : "steelblue";
+        d3.select(this).style("fill", currentColor);
+    }
+})();
 
 var width = 960,
     height = 544
@@ -226,12 +252,25 @@ var drag = force.drag()
     .on("dragend", dragended);
 
 
-d3.json("data.json", function(error, json) {
-  if (error) {
-    console.log(error);
+//d3.json("graph.json", function(error, json) {
+var btn = document.querySelector("#graph_button");
+btn.addEventListener("click", function() {
+  textBox = document.querySelector("#text_box");
+  lines = textBox.value.split('\n');
+  //console.log(lines)
+  data = { "nodes": [] }
+  for (var i=0; i<lines.length; i++) {
+    //line = lines[i].replace(/ /g, '').split('->');
+    line = lines[i].split('->');
+    node = line[0].trim();
+    outlinks = line[1].split(',');
+    for (var j=0; j<outlinks.length; j++) {
+     outlinks[j] = outlinks[j].trim();
+    }
+    data["nodes"].push({ "name": node, "outlinks": outlinks });
   }
 
-  challengeModule.setData(json.challengers);
+  challengeModule.setData(data.nodes);
   var nodes = challengeModule.getNodes();
   var links = challengeModule.getLinks();
 
@@ -264,7 +303,8 @@ d3.json("data.json", function(error, json) {
 
   node.append("circle")
       .style("fill", setColor)
-      .attr("r", 10);
+      .attr("r", 10)
+      .on("click", toggleColor);
 
   node.append("text")
       .attr("dx", 12)
@@ -284,7 +324,7 @@ d3.json("data.json", function(error, json) {
         .attr("y2", function(d) { return d.target.y; });
 
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-  });
+    });
 });
 
 </script>
