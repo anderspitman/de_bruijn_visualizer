@@ -77,9 +77,9 @@ var graphModule = (function() {
   var nodes = [];
   var links = [];
 
-  function indexOf(name) {
-    for (var i=0; i<graph.length; i+=1) {
-      if (name === graph[i].name) {
+  function indexOf(name, arr) {
+    for (var i=0; i<arr.length; i+=1) {
+      if (name === arr[i].name) {
         return i;
       }
     }
@@ -92,32 +92,62 @@ var graphModule = (function() {
         var haveOutlinks = graph[i].outlinks.length > 0;
         var entry = {
           'name': graph[i].name,
-          'have_outlinks': haveOutlinks,
-          'group': 1
+          'have_outlinks': haveOutlinks
         };
         nodes.push(entry);
       }
     }
     return nodes;
   }
+
+  function count(elem, arr) {
+    var count = 0;
+    for (var i=0; i<arr.length; i++) {
+      if (arr[i] == elem) {
+        count += 1;
+      }
+    }
+    return count;
+  }
  
   function buildLinks() {
     for (var i=0; i<graph.length; i+=1) {
+      counts = {};
       for (var j=0; j<graph[i].outlinks.length; j+=1) {
+        outlink = graph[i].outlinks[j];
         var sourceIdx = i;
-        var targetIdx = indexOf(graph[i].outlinks[j], graph);
-        if (targetIdx > -1) {
-          links.push({'source': sourceIdx, 'target': targetIdx, 'value': 1});
+        var targetIdx = indexOf(outlink, nodes);
+        if (targetIdx === -1) {
+          var newEntry = {"name": outlink};
+          var len = nodes.push(newEntry);
+          targetIdx = len-1;
+        }
+        if (!(outlink in counts)) {
+          counts[outlink] = {'count': 0, 'possible': count(outlink, graph[i].outlinks)};
+        }
+        counts[outlink].count += 1;
+        var curve_type = 'straight';
+        var possible = counts[outlink].possible;
+        var count_idx = counts[outlink].count - 1;
+        var curve_weight = (1.0 / possible) * ((counts[outlink].count + (counts[outlink].count % 2)) / 2);
+        console.log(curve_weight);
+        if (possible === 1 || ((possible % 2 != 0) && count_idx === possible-1)) {
+          curve_type = 'straight';
         }
         else {
-          var newEntry = {
-            "name": graph[i].outlinks[j],
-            "group": 1
-          };
-          var len = nodes.push(newEntry);
-          var indexOfNewEntry = len-1;
-          links.push({'source': sourceIdx, 'target': indexOfNewEntry, 'value': 1});
+          if (count_idx % 2 == 0) {
+            curve_type = 'left';
+          }
+          else {
+            curve_type = 'right';
+          }
         }
+        links.push({
+            'source': sourceIdx,
+            'target': targetIdx,
+            'curve_type': curve_type,
+            'curve_weight': curve_weight
+        });
       }
     }
     return links;
@@ -282,10 +312,24 @@ btn.addEventListener("click", function() {
   }
 
   function linkArc(d) {
-    var dx = d.target.x - d.source.x,
-        dy = d.target.y - d.source.y,
-        dr = Math.sqrt(dx * dx + dy * dy);
-    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+    if (d.curve_type == 'straight') {
+      return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
+    }
+    else {
+      var dx = d.target.x - d.source.x,
+          dy = d.target.y - d.source.y,
+          // half of circle
+          dr = Math.sqrt(dx * dx + dy * dy) / 2.0;
+          var sf = 1 - d.curve_weight;
+          dr /= sf;
+
+      if (d.curve_type == 'left') {
+        return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+      }
+      else if (d.curve_type == 'right') {
+        return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,0 " + d.target.x + "," + d.target.y;
+      }
+    }
   }
 
   node.append("circle")
@@ -299,18 +343,7 @@ btn.addEventListener("click", function() {
       .text(function(d) { return d.name });
 
   force.on("tick", function(e) {
-
-    //var k = .5 * e.alpha; 
-    //  node.each(function(d) { 
-    //    d.y += ((d.group) * 100 - d.y) * k; 
-    //});
-
-    //link.attr("x1", function(d) { return d.source.x; })
-    //    .attr("y1", function(d) { return d.source.y; })
-    //    .attr("x2", function(d) { return d.target.x; })
-    //    .attr("y2", function(d) { return d.target.y; });
     link.attr("d", linkArc);
-
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
     });
 });
